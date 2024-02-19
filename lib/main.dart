@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math';
 import 'logo.dart';
 
@@ -15,109 +16,85 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+final List<String> imagePaths = [
+  'assets/1_1.png',
+  'assets/1_2.png',
+  'assets/1_3.png',
+  'assets/1_4.png',
+  'assets/1_5.png',
+  'assets/1_6_pla.jpg',
+  'assets/1_7_pla.jpg',
+  'assets/1_8_pla.jpg',
+  'assets/1_9_pla.jpg',
+  'assets/2_1.png',
+  'assets/2_2.png',
+  'assets/2_3_nor.jpg',
+  'assets/2_4_nor.jpg',
+  'assets/2_5_nor.jpg',
+  'assets/2_6_vin.jpg',
+  'assets/3_1.png',
+  'assets/3_2.png',
+  'assets/3_3_nor.jpg',
+  'assets/3_4_nor.jpg',
+  'assets/4_1.png',
+  'assets/4_2.png',
+  'assets/4_3.png',
+  'assets/4_4.png',
+  'assets/5_1.png',
+  'assets/5_2.png',
+];
+List<int> rounds = [5, 2, 2, 4, 2];
+int roundPlus = 0;
+
+String trashType = '';
+String selectedTrashType = '';
+
+List<int> normalTrash = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+List<int> petTrash = [0];
+List<int> plasticTrash = [1];
+List<int> vinylTrash = [];
+List<int> glassTrash = [3];
+List<int> canTrash = [2, 4];
+
+List<int> usedIndex = [];
+
+int currentImageIndex = 0;
+int currentImageNum = 0;
+int imageNum = imagePaths.length;
+int level = 1;
+int point = 0;
+
 class _MyAppState extends State<MyApp> {
 
-  String trashType = '';
-  String selectedTrashType = '';
-
-  final List<String> imagePaths = [
-    'assets/1.png',
-    'assets/2.png',
-    'assets/3.png',
-    'assets/4.png',
-    'assets/5.png',
-    'assets/6.png',
-    'assets/7.png',
-    'assets/8.png',
-  ];
-  List<int> normalTrash = [0, 1];
-  List<int> petTrash = [2, 3];
-  List<int> plasticTrash = [4];
-  List<int> vinylTrash = [5];
-  List<int> glassTrash = [6];
-  List<int> canTrash = [7];
-
-  List<int> usedIndex = [];
-
-  int currentImageIndex = 0;
-  int imageNum = 8;
-  int currentImageNum = 0;
-  int point = 0;
+  @override
+  void initState() {
+    super.initState();
+    nextImage();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeRight,
+    //   DeviceOrientation.landscapeLeft,
+    // ]);
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title: Text('같은 것끼리 모아서 버려요.'),
+          title: Text('점수: $point, 레벨: $level, 남은 이미지: ${rounds[level-1]-currentImageNum}개',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-                child: Text('화면이동'),
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Logo()),
-                  );
-                },
-            ),
-            SizedBox(
-                width: double.infinity,
-                child: Text(
-                  '점수: $point',
-                  style: TextStyle(fontSize: 28),
-                  textAlign: TextAlign.left,
-                )
-            ),
-            Container(
-              color: Colors.greenAccent,
-              height: 200,
-              child: Center(child: Image.asset('${imagePaths[currentImageIndex]}')),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (currentImageNum < imageNum){
-
-                    currentImageIndex = Random().nextInt(imagePaths.length);
-                    while (usedIndex.contains(currentImageIndex)){
-                      currentImageIndex = Random().nextInt(imagePaths.length);
-                    }
-
-                    usedIndex.add(currentImageIndex);
-                    currentImageNum++;
-
-                    print ('currentImageIndex: $currentImageIndex');
-
-                    if (normalTrash.contains(currentImageIndex)){
-                      selectedTrashType = '일반팩';
-                    }
-                    else if (plasticTrash.contains(currentImageIndex)){
-                      selectedTrashType = '플라스틱';
-                    }
-                    else if (petTrash.contains(currentImageIndex)){
-                      selectedTrashType = '페트';
-                    }
-                    else if (vinylTrash.contains(currentImageIndex)){
-                      selectedTrashType = '비닐류';
-                    }
-                    else if (glassTrash.contains(currentImageIndex)){
-                      selectedTrashType = '유리';
-                    }
-                    else if (canTrash.contains(currentImageIndex)){
-                      selectedTrashType = '캔류';
-                    }
-                  }
-                  else {
-                    point = 99999999999;
-                  }
-                });
-              },
-              child: Text('Change Image'),
+            Flexible(
+              child: Container(
+                color: Colors.greenAccent,
+                height: double.infinity,
+                child: Center(child: Image.asset('${imagePaths[currentImageIndex]}', width: double.infinity, height: double.infinity, fit: BoxFit.contain,)),
+              ),
             ),
             Row(
               children: [
@@ -136,6 +113,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
                     child: Image.asset('assets/trashcan.png'),
@@ -156,9 +134,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
-                    child: Text('페트'),
+                    child: Image.asset('assets/투명페트.png'),
                   ),
                 )),
                 Expanded(child: Container(
@@ -176,9 +155,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
-                    child: Text('플라스틱'),
+                    child: Image.asset('assets/Plastic.png'),
                   ),
                 )),
                 Expanded(child: Container(
@@ -196,9 +176,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
-                    child: Text('비닐류'),
+                    child: Image.asset('assets/비닐류.png'),
                   ),
                 )),
                 Expanded(child: Container(
@@ -216,9 +197,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
-                    child: Text('유리'),
+                    child: Image.asset('assets/유리.png'),
                   ),
                 )),
                 Expanded(child: Container(
@@ -236,9 +218,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
+                        nextImage();
                       });
                     },
-                    child: Text('캔류'),
+                    child: Image.asset('assets/캔.png'),
                   ),
                 )),
               ],
@@ -251,3 +234,46 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+void nextImage() {
+  if (currentImageNum < rounds[level-1]){
+
+    currentImageIndex = Random().nextInt(rounds[level-1])+roundPlus;
+    while (usedIndex.contains(currentImageIndex)){
+      currentImageIndex = Random().nextInt(rounds[level-1])+roundPlus;
+    }
+
+    usedIndex.add(currentImageIndex);
+    currentImageNum++;
+
+    if (normalTrash.contains(currentImageIndex)){
+      selectedTrashType = '일반팩';
+    }
+    else if (plasticTrash.contains(currentImageIndex)){
+      selectedTrashType = '플라스틱';
+    }
+    else if (petTrash.contains(currentImageIndex)){
+      selectedTrashType = '페트';
+    }
+    else if (vinylTrash.contains(currentImageIndex)){
+      selectedTrashType = '비닐류';
+    }
+    else if (glassTrash.contains(currentImageIndex)){
+      selectedTrashType = '유리';
+    }
+    else if (canTrash.contains(currentImageIndex)){
+      selectedTrashType = '캔류';
+    }
+  }
+  else {
+    if (level == 5){
+      point = 999;
+      print('게임 종료');
+      return;
+    }
+    roundPlus += rounds[level-1];
+    level++;
+    currentImageNum = 0;
+    usedIndex = [];
+    nextImage();
+  }
+}
