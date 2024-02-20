@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    nextImage(context);
+    nextImage(context, point);
   }
 
   @override
@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/trashcan.png'),
@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/투명페트.png'),
@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/플라스틱.png'),
@@ -178,7 +178,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/비닐류.png'),
@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/유리.png'),
@@ -220,7 +220,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage(context);
+                        nextImage(context, point);
                       });
                     },
                     child: Image.asset('assets/캔류.png'),
@@ -236,7 +236,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-void nextImage(BuildContext context) {
+void nextImage(BuildContext context, int point) {
   if (currentImageNum < rounds[level-1]){
 
     currentImageIndex = Random().nextInt(rounds[level-1])+roundPlus;
@@ -270,13 +270,13 @@ void nextImage(BuildContext context) {
     if (level == 5){
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Ending()),
+        MaterialPageRoute(builder: (context) => Ending(point)),
       );
     }
     roundPlus += rounds[level-1];
     level++;
     currentImageNum = 0;
     usedIndex = [];
-    nextImage(context);
+    nextImage(context, point);
   }
 }

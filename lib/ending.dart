@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 
 class Ending extends StatelessWidget {
+  final int point;
+  Ending(this.point, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,6 +15,7 @@ class Ending extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
+              'Your score is $point!'
               'Thank you for playing!',
               style: TextStyle(fontSize: 24),
             ),
