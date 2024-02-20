@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recycler/ending.dart';
 import 'dart:math';
 import 'logo.dart';
+import 'dart:async';
 
 void main() => runApp(MaterialApp(
   title: 'Navigation Basics',
@@ -17,31 +19,31 @@ class MyApp extends StatefulWidget {
 }
 
 final List<String> imagePaths = [
-  'assets/1_1.png',
-  'assets/1_2.png',
-  'assets/1_3.png',
-  'assets/1_4.png',
-  'assets/1_5.png',
-  'assets/1_6_pla.jpg',
-  'assets/1_7_pla.jpg',
-  'assets/1_8_pla.jpg',
-  'assets/1_9_pla.jpg',
-  'assets/2_1.png',
-  'assets/2_2.png',
-  'assets/2_3_nor.jpg',
-  'assets/2_4_nor.jpg',
-  'assets/2_5_nor.jpg',
-  'assets/2_6_vin.jpg',
-  'assets/3_1.png',
-  'assets/3_2.png',
-  'assets/3_3_nor.jpg',
-  'assets/3_4_nor.jpg',
-  'assets/4_1.png',
-  'assets/4_2.png',
-  'assets/4_3.png',
-  'assets/4_4.png',
-  'assets/5_1.png',
-  'assets/5_2.png',
+  'assets/Quiz/1_1.png',
+  'assets/Quiz/1_2.png',
+  'assets/Quiz/1_3.png',
+  'assets/Quiz/1_4.png',
+  'assets/Quiz/1_5.png',
+  'assets/Quiz/1_6_pla.jpg',
+  'assets/Quiz/1_7_pla.jpg',
+  'assets/Quiz/1_8_pla.jpg',
+  'assets/Quiz/1_9_pla.jpg',
+  'assets/Quiz/2_1.png',
+  'assets/Quiz/2_2.png',
+  'assets/Quiz/2_3_nor.jpg',
+  'assets/Quiz/2_4_nor.jpg',
+  'assets/Quiz/2_5_nor.jpg',
+  'assets/Quiz/2_6_vin.jpg',
+  'assets/Quiz/3_1.png',
+  'assets/Quiz/3_2.png',
+  'assets/Quiz/3_3_nor.jpg',
+  'assets/Quiz/3_4_nor.jpg',
+  'assets/Quiz/4_1.png',
+  'assets/Quiz/4_2.png',
+  'assets/Quiz/4_3.png',
+  'assets/Quiz/4_4.png',
+  'assets/Quiz/5_1.png',
+  'assets/Quiz/5_2.png',
 ];
 List<int> rounds = [5, 2, 2, 4, 2];
 int roundPlus = 0;
@@ -69,7 +71,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    nextImage();
+    nextImage(context);
   }
 
   @override
@@ -113,7 +115,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
                     child: Image.asset('assets/trashcan.png'),
@@ -134,7 +136,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
                     child: Image.asset('assets/투명페트.png'),
@@ -155,10 +157,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
-                    child: Image.asset('assets/Plastic.png'),
+                    child: Image.asset('assets/플라스틱.png'),
                   ),
                 )),
                 Expanded(child: Container(
@@ -176,7 +178,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
                     child: Image.asset('assets/비닐류.png'),
@@ -197,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
                     child: Image.asset('assets/유리.png'),
@@ -218,10 +220,10 @@ class _MyAppState extends State<MyApp> {
                         else {
                           point -= 1;
                         }
-                        nextImage();
+                        nextImage(context);
                       });
                     },
-                    child: Image.asset('assets/캔.png'),
+                    child: Image.asset('assets/캔류.png'),
                   ),
                 )),
               ],
@@ -234,7 +236,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-void nextImage() {
+void nextImage(BuildContext context) {
   if (currentImageNum < rounds[level-1]){
 
     currentImageIndex = Random().nextInt(rounds[level-1])+roundPlus;
@@ -266,14 +268,15 @@ void nextImage() {
   }
   else {
     if (level == 5){
-      point = 999;
-      print('게임 종료');
-      return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Ending()),
+      );
     }
     roundPlus += rounds[level-1];
     level++;
     currentImageNum = 0;
     usedIndex = [];
-    nextImage();
+    nextImage(context);
   }
 }
