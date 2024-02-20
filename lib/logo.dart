@@ -28,7 +28,7 @@ class _LogoState extends State<Logo> with SingleTickerProviderStateMixin {
     Timer(Duration(seconds: 2), () async {
       await _controller.reverse().then((_) => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MyApp()),
+        MaterialPageRoute(builder: (context) => MyApp(true)),
       ));
     });
   }

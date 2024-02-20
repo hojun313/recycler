@@ -3,16 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:recycler/ending.dart';
 import 'dart:math';
 import 'logo.dart';
-import 'dart:async';
 
 void main() => runApp(MaterialApp(
   title: 'Navigation Basics',
   home: Logo(),
-  )
+)
 );
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  bool re;
+  MyApp(this.re, {super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -45,6 +45,7 @@ final List<String> imagePaths = [
   'assets/Quiz/5_1.png',
   'assets/Quiz/5_2.png',
 ];
+
 List<int> rounds = [5, 2, 2, 4, 2];
 int roundPlus = 0;
 
@@ -71,166 +72,171 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    if (widget.re){
+      point = 0;
+      level = 1;
+      roundPlus = 0;
+      currentImageNum = 0;
+      usedIndex = [];
+      nextImage(context, point);
+      widget.re = false;
+    }
     nextImage(context, point);
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeRight,
-    //   DeviceOrientation.landscapeLeft,
-    // ]);
 
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: Text('점수: $point, 레벨: $level, 남은 이미지: ${rounds[level-1]-currentImageNum}개',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Flexible(
-              child: Container(
-                color: Colors.greenAccent,
-                height: double.infinity,
-                child: Center(child: Image.asset('${imagePaths[currentImageIndex]}', width: double.infinity, height: double.infinity, fit: BoxFit.contain,)),
-              ),
+        home: Scaffold(
+            appBar: AppBar(
+                backgroundColor: Colors.red,
+                title: Text('점수: $point, 레벨: $level, 남은 이미지: ${rounds[level-1]-currentImageNum}개',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
             ),
-            Row(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(child: Container(
-                  color: Colors.red,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.redAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '일반팩'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/trashcan.png'),
+                Flexible(
+                  child: Container(
+                    color: Colors.greenAccent,
+                    height: double.infinity,
+                    child: Center(child: Image.asset('${imagePaths[currentImageIndex]}', width: double.infinity, height: double.infinity, fit: BoxFit.contain,)),
                   ),
-                )),
-                Expanded(child: Container(
-                  color: Colors.green,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '페트'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/투명페트.png'),
-                  ),
-                )),
-                Expanded(child: Container(
-                  color: Colors.blue,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blueAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '플라스틱'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/플라스틱.png'),
-                  ),
-                )),
-                Expanded(child: Container(
-                  color: Colors.yellow,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.yellowAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '비닐류'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/비닐류.png'),
-                  ),
-                )),
-                Expanded(child: Container(
-                  color: Colors.purple,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.purpleAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '유리'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/유리.png'),
-                  ),
-                )),
-                Expanded(child: Container(
-                  color: Colors.orange,
-                  height: 150,
-                  child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.orangeAccent.shade100),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedTrashType == '캔류'){
-                          point += 1;
-                        }
-                        else {
-                          point -= 1;
-                        }
-                        nextImage(context, point);
-                      });
-                    },
-                    child: Image.asset('assets/캔류.png'),
-                  ),
-                )),
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Container(
+                      color: Colors.red,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.redAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '일반팩'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/trashcan.png'),
+                      ),
+                    )),
+                    Expanded(child: Container(
+                      color: Colors.green,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '페트'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/투명페트.png'),
+                      ),
+                    )),
+                    Expanded(child: Container(
+                      color: Colors.blue,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.blueAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '플라스틱'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/플라스틱.png'),
+                      ),
+                    )),
+                    Expanded(child: Container(
+                      color: Colors.yellow,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.yellowAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '비닐류'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/비닐류.png'),
+                      ),
+                    )),
+                    Expanded(child: Container(
+                      color: Colors.purple,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.purpleAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '유리'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/유리.png'),
+                      ),
+                    )),
+                    Expanded(child: Container(
+                      color: Colors.orange,
+                      height: 150,
+                      child: FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.orangeAccent.shade100),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedTrashType == '캔류'){
+                              point += 1;
+                            }
+                            else {
+                              point -= 1;
+                            }
+                            nextImage(context, point);
+                          });
+                        },
+                        child: Image.asset('assets/캔류.png'),
+                      ),
+                    )),
+                  ],
+                )
               ],
             )
-          ],
         )
-      )
     );
 
   }

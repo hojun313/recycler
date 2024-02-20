@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:recycler/main.dart';
 
 class Ending extends StatelessWidget {
   final int point;
@@ -21,7 +22,7 @@ class Ending extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(true)));
               },
               child: Text('Go back!'),
             ),
