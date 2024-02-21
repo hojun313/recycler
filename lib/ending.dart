@@ -16,15 +16,15 @@ class Ending extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Your score is $point!'
+              '최종 점수는 $point점 입니다! \n'
               'Thank you for playing!',
-              style: TextStyle(fontSize: 24),
+              style: TextStyle(fontSize: 24), textAlign: TextAlign.center,
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(true)));
               },
-              child: Text('Go back!'),
+              child: Text('재시도!'),
             ),
           ],
         ),

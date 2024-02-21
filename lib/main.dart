@@ -19,51 +19,50 @@ class MyApp extends StatefulWidget {
 }
 
 final List<String> imagePaths = [
-  'assets/Quiz/1_1.png',
-  'assets/Quiz/1_2.png',
-  'assets/Quiz/1_3.png',
-  'assets/Quiz/1_4.png',
-  'assets/Quiz/1_5.png',
+  'assets/Quiz/1_1_pet.png',
+  'assets/Quiz/1_2_pla.png',
+  'assets/Quiz/1_3_can.png',
+  'assets/Quiz/1_4_gla.png',
+  'assets/Quiz/1_5_can.png',
   'assets/Quiz/1_6_pla.jpg',
   'assets/Quiz/1_7_pla.jpg',
   'assets/Quiz/1_8_pla.jpg',
   'assets/Quiz/1_9_pla.jpg',
-  'assets/Quiz/2_1.png',
-  'assets/Quiz/2_2.png',
+  'assets/Quiz/2_1_nor.png',
+  'assets/Quiz/2_2_nor.png',
   'assets/Quiz/2_3_nor.jpg',
   'assets/Quiz/2_4_nor.jpg',
   'assets/Quiz/2_5_nor.jpg',
   'assets/Quiz/2_6_vin.jpg',
-  'assets/Quiz/3_1.png',
-  'assets/Quiz/3_2.png',
+  'assets/Quiz/3_1_nor.png',
+  'assets/Quiz/3_2_nor.png',
   'assets/Quiz/3_3_nor.jpg',
   'assets/Quiz/3_4_nor.jpg',
-  'assets/Quiz/4_1.png',
-  'assets/Quiz/4_2.png',
-  'assets/Quiz/4_3.png',
-  'assets/Quiz/4_4.png',
-  'assets/Quiz/5_1.png',
-  'assets/Quiz/5_2.png',
+  'assets/Quiz/4_1_nor.png',
+  'assets/Quiz/4_2_nor.png',
+  'assets/Quiz/4_3_nor.png',
+  'assets/Quiz/4_4_nor.png',
+  'assets/Quiz/5_1_nor.png',
+  'assets/Quiz/5_2_nor.png',
 ];
 
-List<int> rounds = [5, 2, 2, 4, 2];
+List<int> rounds = [9, 6, 4, 4, 2];
 int roundPlus = 0;
 
 String trashType = '';
 String selectedTrashType = '';
 
-List<int> normalTrash = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+List<int> normalTrash = [10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 List<int> petTrash = [0];
-List<int> plasticTrash = [1];
-List<int> vinylTrash = [];
-List<int> glassTrash = [3];
+List<int> plasticTrash = [1, 5, 6, 7, 8];
+List<int> vinylTrash = [15];
+List<int> glassTrash = [3, 9];
 List<int> canTrash = [2, 4];
 
 List<int> usedIndex = [];
 
 int currentImageIndex = 0;
 int currentImageNum = 0;
-int imageNum = imagePaths.length;
 int level = 1;
 int point = 0;
 
@@ -81,7 +80,6 @@ class _MyAppState extends State<MyApp> {
       nextImage(context, point);
       widget.re = false;
     }
-    nextImage(context, point);
   }
 
   @override
@@ -243,6 +241,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 void nextImage(BuildContext context, int point) {
+  //print("currentImageNum = $currentImageNum, currentImageIndex = $currentImageIndex, selectedTrashType = $selectedTrashType, point = $point");
   if (currentImageNum < rounds[level-1]){
 
     currentImageIndex = Random().nextInt(rounds[level-1])+roundPlus;
